@@ -1,0 +1,5 @@
+#!/bin/bash
+# CheckTime is a free software developed by Tommaso Fontana for Würth Phoenix S.r.l. under GPL-2 License.
+DIR=$(dirname "$(python -c "import os,sys; print(os.path.realpath(sys.argv[1]))" $0)")
+cd $DIR/..
+python3 -c "from influx_plugins import check_time_cli; check_time_cli()" "$@"

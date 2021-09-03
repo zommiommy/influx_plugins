@@ -1,0 +1,20 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  influxdb:
+    image: "influxdb:2.0"
+    ports:
+      - "8086:8086"
+    environment:
+      - "DOCKER_INFLUXDB_INIT_MODE=setup"
+      - "DOCKER_INFLUXDB_INIT_USERNAME=root"
+      - "DOCKER_INFLUXDB_INIT_PASSWORD=passwordpasswordpassword"
+      - "DOCKER_INFLUXDB_INIT_ORG=my-org"
+      - "DOCKER_INFLUXDB_INIT_BUCKET=my-bucket"
+      - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=token"
+
+
+#    volumes:
+#      - influxdb2:/var/lib/influxdb2
+
+#volumes:
+#  influxdb2: {}
