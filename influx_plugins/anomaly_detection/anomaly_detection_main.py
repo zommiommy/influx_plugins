@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from influxdb import InfluxDBClient
 from ..utils import logger, setLevel, DBAdapter
 from ..utils import parse_time_to_epoch
 
@@ -91,3 +92,7 @@ def anomaly_detection(settings):
             continue
 
         # Write to db
+        client = InfluxDBClient(**output_db_settings)
+        client.create_database(output_db_settings["database"])
+        client.switch_database(output_db_settings["database"])
+        client.write_points(classifications)

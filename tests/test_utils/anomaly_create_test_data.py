@@ -37,8 +37,8 @@ def create_telegraf_schema_anomaly_data(client):
     settings = {
         "input_database":"test_db",
         "output_database":"test_db",
-        "input_measurement":"anomaly_measurement_icinga",
-        "output_measurement":"anomaly_measurement_icinga_ml",
+        "input_measurement":"anomaly_measurement_telegraf",
+        "output_measurement":"anomaly_measurement_telegraf_ml",
         
         "selectors":"host,service,kpi",
         "filter":"",#"host = 'host01' AND service = 'service01'",
