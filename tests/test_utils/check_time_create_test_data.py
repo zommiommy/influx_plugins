@@ -39,11 +39,8 @@ def create_telegraf_schema_check_time_data(client):
     settings = {
         "db_type":"telegraf",
         "measurement":"check_time_measurement_telegraf",
-        "host_column":"host",
-        "host":"host01",
-
-        "service_column":"service",
-        "service":"service01",
+        
+        "filter":"host = 'host01' AND service = 'service01'",
 
         "kpi_column":"kpi",
         "target_kpi":"disk_util",
@@ -55,7 +52,7 @@ def create_telegraf_schema_check_time_data(client):
 
         "verbosity":"info",
         "window":"1000s",
-        "debug_plot":"debug_telegraf.png",
+        "debug_plot":"debug/debug_telegraf.png",
     }
 
     return 200, 0.9, settings
@@ -95,11 +92,7 @@ def create_telegraf_schema_check_time_data_no_max(client):
         "db_type":"telegraf",
         "measurement":"check_time_measurement_telegraf",
 
-        "host_column":"host",
-        "host":"host01",
-
-        "service_column":"service",
-        "service":"service01",
+        "filter":"host = 'host01' AND service = 'service01'",
 
         "kpi_column":"kpi",
         "target_kpi":"cpu_util",
@@ -109,7 +102,7 @@ def create_telegraf_schema_check_time_data_no_max(client):
         
         "verbosity":"info",
         "window":"1000s",
-        "debug_plot":"debug_telegraf_no_max.png",
+        "debug_plot":"debug/debug_telegraf_no_max.png",
     }
 
     return 400, 0.98, settings
@@ -148,16 +141,13 @@ def create_icinga_schema_check_time_data(client):
     settings = {
         "db_type":"icinga",
         "measurement":"check_time_measurement_icinga",
-        "host":"host01",
-        "host_column":"host",
-        "service":"service01",
-        "service_column":"service",
+        "filter":"host = 'host01' AND service = 'service01'",
         "target_column":"disk_utilizzation",
         "value_type":"usage",
         "max_column":"disk_utilizzation_max",
         "verbosity":"info",
         "window":"10000s",
-        "debug_plot":"debug_icinga.png",
+        "debug_plot":"debug/debug_icinga.png",
     }
 
     return 800, 0.9, settings
@@ -195,15 +185,12 @@ def create_icinga_schema_check_time_data_free(client):
     settings = {
         "db_type":"icinga",
         "measurement":"check_time_measurement_icinga",
-        "host":"host01",
-        "host_column":"host",
-        "service":"service01",
-        "service_column":"service",
+        "filter":"host = 'host01' AND service = 'service01'",
         "target_column":"space_left_percent",
         "value_type":"free_quantile",
         "verbosity":"info",
         "window":"10000s",
-        "debug_plot":"debug_icinga_free.png",
+        "debug_plot":"debug/debug_icinga_free.png",
     }
 
-return 1400, 0.65, settings`    
+    return 1400, 0.65, settings    

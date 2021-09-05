@@ -48,7 +48,7 @@ def check_time(settings):
     db = DBAdapter(db_settings, settings["db_type"])
 
     logger.info("Retrieving the data from the db")
-    data = db.get(settings).get_points()
+    data = db.get_check_time_data(settings).get_points()
 
     x, y = normalize_data(data, settings["value_type"])   
 

@@ -5,7 +5,10 @@ import argparse
 
 
 from .check_time_main import check_time
-from ..utils import copyrights, Colors, logger, epoch_to_time, time_to_epoch
+from ..utils import (
+    copyrights, Colors, logger, epoch_to_time, 
+    time_to_epoch, MyParser 
+)
 
 description = """
 {copyrights}
@@ -20,7 +23,7 @@ In the `telegraf` schema has two columns, `kpi` and `value` where all the values
 are, for example:
 {blue}
 time       host        service    kpi              value
-----       ----        -------     ---              -----
+----       ----        -------    ---              -----
 1567005362 my.host.com my.service disk_utilization 0.9
 1567005362 my.host.com my.service cpu_utilization  0.3
 {reset}
@@ -35,10 +38,9 @@ Optionally, both can have a max kpi / column.
 For the `telegraf` these should be selected using the `--max-kpi` argument and 
 the schema should look like this:
 {blue}
-time       host        service    kpi                   value
-----       ----        -------     ---                  -----
-1567005362 my.host.com my.service disk_utilization      90
-1567005362 my.host.com my.service disk_utilization_max  100
+time       host        service    kpi              value max
+----       ----        -------    ---              ----- ---
+1567005362 my.host.com my.service disk_utilization 90    100
 {reset}
 while for the `icinga` schema you should use the `--max-column` argument and
 the schema should look like this:
@@ -55,16 +57,6 @@ time       host        service    disk_utilization disk_utilization_max
     yellow=Colors.YELLOW, 
     reset=Colors.RESET,
 )
-
-class MyParser(argparse.ArgumentParser):
-    """Custom parser to ensure that the exit code on error is 1
-        and that the error messages are printed on the stderr 
-        so that the stdout is only for sucessfull data analysis"""
-
-    def error(self, message):
-        sys.stderr.write('error: %s\n' % message)
-        self.print_help(file=sys.stderr)
-        sys.exit(1)
 
 def check_time_cli():
     """The Cli adapter for the check_time utility."""
@@ -98,9 +90,9 @@ def check_time_cli():
     thresholds_settings.add_argument(
         "-n", 
         "--window",
-         help="the range of time to consider in the analysis.",
-         type=str, 
-         required=True,
+        help="the range of time to consider in the analysis.",
+        type=str, 
+        required=True,
     )
     thresholds_settings.add_argument(
         "-w", 
@@ -131,41 +123,17 @@ def check_time_cli():
         type=str, 
         required=True
     )
-    query_settings.add_argument(
-        "--host", 
-        help="host which disks will be checked.", 
-        type=str, 
-        required=True
-    )
-    query_settings.add_argument(
-        "--host-column", 
-        help="The name of the host column.%s"%default_fmt,         
-        type=str, 
-        default="host",
-    )
-    query_settings.add_argument(
-        "--service", 
-        help="service to be checked.",         
-        type=str, 
-        required=True
-    )
-    query_settings.add_argument(
-        "--service-column", 
-        help="The name of the service column.%s"%default_fmt,         
-        type=str, 
-        default="service",
-    )
-
+    query_settings = parser.add_argument_group('{cyan}query settings (optional){reset}'.format(cyan=Colors.CYAN, reset=Colors.RESET))
     query_settings.add_argument(
         "--value-type", 
         help=
 """How the value should be interpreted:
-- `usage`: value / max
+- `usage`:            value / max
 - `usage_percentile`: value / 100
-- `usage_quantile`: value
-- `free`: 1 - (value / max)
-- `free_percentile`: 1 - (value / 100)
-- `free_quantile`: 1 - value
+- `usage_quantile`:   value
+- `free`:             1 - (value / max)
+- `free_percentile`:  1 - (value / 100)
+- `free_quantile`:    1 - value
 Note that for `usage` and `free` you must also specify the `--max-column` argument
 with which column / kpi to use to retrieve the max.%s
 """%default_fmt,       
@@ -176,7 +144,6 @@ with which column / kpi to use to retrieve the max.%s
         ],
         default="usage",
     )
-
     query_settings.add_argument(
         "--max-column", 
         help=
@@ -185,6 +152,18 @@ This is used only if value-type is set to `usage` or `free`,
 """,         
         type=str, 
         required=True,
+    )
+    query_settings.add_argument(
+        "--filter", 
+        help=
+"""
+Extra clausole to add to the WHERE part of the query, this is often used to
+select the host and service. 
+
+Example:
+--filter="host = 'myhost' AND service = 'myservice' AND disk = 'sda' AND path = '/var/'" """,         
+        type=str, 
+        default="",
     )
 
     icinga_settings = parser.add_argument_group('{blue}icinga db settings (required if --db-type=icinga){reset}'.format(blue=Colors.BLUE, reset=Colors.RESET))

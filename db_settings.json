@@ -11,5 +11,4 @@
     "use_udp": false,
     "udp_port": 4444,
     "proxies": {},
-    "path": ""
 }

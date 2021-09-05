@@ -14,3 +14,14 @@ class Colors:
     CYAN="\033[36m"
     WHITE="\033[37m"
     RESET="\033[0;37;40m"
+
+import argparse
+class MyParser(argparse.ArgumentParser):
+    """Custom parser to ensure that the exit code on error is 1
+        and that the error messages are printed on the stderr 
+        so that the stdout is only for sucessfull data analysis"""
+
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help(file=sys.stderr)
+        sys.exit(1)
