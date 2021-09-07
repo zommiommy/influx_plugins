@@ -20,7 +20,7 @@ def classify_point(point, training_data):
             "warn_threshould":warn_threshold,
             "anom_threshold":anom_threshold,
         }
-    elif point["value"] > warn_threshold:
+    elif anom_threshold > point["value"] > warn_threshold:
         return {
             "warning":1,
             "anomaly":0,
