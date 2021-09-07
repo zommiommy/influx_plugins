@@ -92,19 +92,19 @@ will be classified as possible anomalies.
 {}
 """.format(default_fmt),
         type=float,
-        default=0.05,
+        default=0.95,
     ) 
     analysis_settings.add_argument(
         "--anomaly",
         help=
 """The model infers how probable is each point, this is the probability treshold 
 that classifies anomalies.
-For example 0.02 means that the values with probability less than 2%% 
+For example 0.99 means that the values with probability less than 1%% 
 will be classified as anomalies.
 {}
 """.format(default_fmt),
         type=float,
-        default=0.02,
+        default=0.99,
     ) 
     
     write_settings = parser.add_argument_group('{cyan}Write settings{reset}'.format(cyan=Colors.CYAN, reset=Colors.RESET))
