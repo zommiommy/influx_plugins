@@ -57,6 +57,7 @@ def anomaly_detection(settings):
             "verify_ssl",
             "cert",
         ]
+        if key in settings
     }
     input_db_settings["database"] = settings["input_database"]
     output_db_settings = input_db_settings.copy()
