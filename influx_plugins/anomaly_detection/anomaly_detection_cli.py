@@ -106,36 +106,6 @@ will be classified as anomalies.
         type=float,
         default=0.02,
     ) 
-
-    analysis_settings.add_argument(
-        "--group-by-time",
-        help=
-"""In several applications, there are cyclical behaviours, such as more traffic
-on the week-end or less requests during lunch break.
-So, using a cycle of a week, data will be grouped using this value, so that the 
-comparison is more fair.
-Example: if this argument is `1h`, if I have to classify a point with date:
-`monday 12:10`, it will compared against all the training data between 
-`monday 12:00` and `monday 13:00` of the previous weeks.
-If otherwise the argument is `1d`, all the data from `friday` will be compared
-against the `fridies` of the previous weeks (in the training data).
-{}
-""".format(default_fmt),
-        type=str, 
-        default="1h"
-    )  
-    analysis_settings.add_argument(
-        "--ignore-lower-values",
-        help=
-"""Usually the analysis will report both values that are too-big or too-small. 
-This flags only keeps the higher values. This changes the warning and anomaly 
-quantiles from two-tailed ones to single-tailed ones, which means that you might
-want to use smaller values for the `--anomaly` and `--warning` arguments, because
-this changes the distribution of the values.
-""",
-        action="store_true",
-        default=False,
-    ) 
     
     write_settings = parser.add_argument_group('{cyan}Write settings{reset}'.format(cyan=Colors.CYAN, reset=Colors.RESET))
     write_settings.add_argument(
