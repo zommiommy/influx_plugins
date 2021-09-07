@@ -7,7 +7,7 @@ import argparse
 from .check_time_main import check_time
 from ..utils import (
     copyrights, Colors, logger, epoch_to_time, 
-    time_to_epoch, MyParser 
+    MyParser 
 )
 
 description = """
@@ -151,7 +151,7 @@ with which column / kpi to use to retrieve the max.%s
 This is used only if value-type is set to `usage` or `free`,
 """,         
         type=str, 
-        required=True,
+        default=None,
     )
     query_settings.add_argument(
         "--filter", 
@@ -196,11 +196,6 @@ Example:
 
     args = vars(parser.parse_args())
 
-    # Parse the time fields
-    args["window"] = time_to_epoch(args["window"])
-    args["warning_threshold"] = time_to_epoch(args["warning_threshold"])
-    args["critical_threshold"] = time_to_epoch(args["critical_threshold"])
-
     # Run the prediction
     time_predicted, score = check_time(args)
     
@@ -208,12 +203,12 @@ Example:
     logger.info("Critical threshold %s", args["critical_threshold"])
 
     # Critical case
-    if time_predicted < args["critical_threshold"]:
+    if time_predicted >= args["critical_threshold"]:
         logger.critical("Critical theshold failed!")
         exit_code = 2
         status = "CRITICAL"
     # Warning case
-    elif time_predicted < args["warning_threshold"]:
+    elif time_predicted >= args["warning_threshold"]:
         logger.warning("Warning theshold failed!")
         exit_code = 1
         status = "WARNING"
@@ -225,5 +220,5 @@ Example:
 
     # Print the data in a format that is neteye compatible
     # This should be the only thing in stdout
-    print("{}: {} {} ({:.2f})".format(status, time_predicted, epoch_to_time(time_predicted), score))
+    print("{}: {} {} ({:.2f})".format(status, time_predicted, epoch_to_time(time_predicted), 100 * score))
     sys.exit(exit_code)

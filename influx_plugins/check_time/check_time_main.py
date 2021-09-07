@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from ..utils import logger, setLevel, DBAdapter
+from ..utils import logger, setLevel, DBAdapter, time_to_epoch
 from .predict_time_left import predict_time_left
 from .normalize_data import normalize_data
 
@@ -38,6 +38,10 @@ def check_time(settings):
                 "--db-type=telegraf but --target-column was passed which is "
                 "for --db-type=icinga"
             )
+
+    settings["window"] = time_to_epoch(settings["window"])
+    settings["warning_threshold"] = time_to_epoch(settings["warning_threshold"])
+    settings["critical_threshold"] = time_to_epoch(settings["critical_threshold"])
 
     if not os.path.exists(settings["db_settings"]):
         logger.error("The given db-settings path do not exist: '%s'", settings["db_settings"])

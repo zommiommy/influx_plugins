@@ -53,6 +53,8 @@ def create_telegraf_schema_check_time_data(client):
         "verbosity":"info",
         "window":"1000s",
         "debug_plot":"debug/debug_telegraf.png",
+        "warning_threshold":"300s",
+        "critical_threshold":"400s",
     }
 
     return 200, 0.9, settings
@@ -103,6 +105,8 @@ def create_telegraf_schema_check_time_data_no_max(client):
         "verbosity":"info",
         "window":"1000s",
         "debug_plot":"debug/debug_telegraf_no_max.png",
+        "warning_threshold":"500s",
+        "critical_threshold":"600s",
     }
 
     return 400, 0.98, settings
@@ -148,6 +152,8 @@ def create_icinga_schema_check_time_data(client):
         "verbosity":"info",
         "window":"10000s",
         "debug_plot":"debug/debug_icinga.png",
+        "warning_threshold":"900s",
+        "critical_threshold":"1000s",
     }
 
     return 800, 0.9, settings
@@ -191,6 +197,8 @@ def create_icinga_schema_check_time_data_free(client):
         "verbosity":"info",
         "window":"10000s",
         "debug_plot":"debug/debug_icinga_free.png",
+        "warning_threshold":"1500s",
+        "critical_threshold":"2000s",
     }
 
-    return 1400, 0.65, settings    
+    return 1400, 0.65, settings

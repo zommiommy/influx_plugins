@@ -120,34 +120,34 @@ WHERE (
             query_settings["extra_filter"] = ""
 
         if self.db_schema == "icinga" and query_settings.get("max_column") is not None:
-            return self.client.query(
+            return self.query(
 """
 SELECT time, {target_column} as value, {max_column} as max
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window})
+    time > (now() - {window:g}s)
     {extra_filter}
 )
 """.format(**query_settings)
             )
         elif self.db_schema == "icinga" and query_settings.get("max_column") is None:
-            return self.client.query(
+            return self.query(
 """
 SELECT time, {target_column} as value
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window})
+    time > (now() - {window:g}s)
     {extra_filter}
 )
 """.format(**query_settings)
             )
         elif self.db_schema == "telegraf" and query_settings.get("max_column") is None:
-            return self.client.query(
+            return self.query(
 """
 SELECT time, {value_column} as value
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window})
+    time > (now() - {window:g}s)
     AND
     {kpi_column} = '{target_kpi}'
     {extra_filter}
@@ -155,12 +155,12 @@ WHERE (
 """.format(**query_settings)
             )
         elif self.db_schema == "telegraf" and query_settings.get("max_column") is not None:
-            return self.client.query(
+            return self.query(
 """
 SELECT time, {value_column} as value, {max_column} as max
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window})
+    time > (now() - {window:g}s)
     AND
     {kpi_column} = '{target_kpi}'
     {extra_filter}
