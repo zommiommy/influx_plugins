@@ -23,6 +23,7 @@ class DBAdapter:
 
     def get_selectors_combinations(self, query_settings):
         """Takes the list of selectors and """
+        logger.info("Finding all the combinations of the selectors fields")
         if query_settings["filter"] != "":
             query_settings["extra_filter"] = "AND " + query_settings["filter"]
         else:

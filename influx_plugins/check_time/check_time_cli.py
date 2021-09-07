@@ -86,7 +86,9 @@ def check_time_cli():
         default=None,
     )
 
-    thresholds_settings = parser.add_argument_group('{cyan}thresholds settings (required){reset}'.format(cyan=Colors.CYAN, reset=Colors.RESET))
+    thresholds_settings = parser.add_argument_group(
+"""{cyan}thresholds settings (required){reset}
+(these 3 arguments take values in the influx time format. E.g 1w2d3h4m5.6s is 1 week + 2 day + 3 hours + 4 minutes + 5.6 seconds)""".format(cyan=Colors.CYAN, reset=Colors.RESET))
     thresholds_settings.add_argument(
         "-n", 
         "--window",
@@ -220,5 +222,5 @@ Example:
 
     # Print the data in a format that is neteye compatible
     # This should be the only thing in stdout
-    print("{}: {} {} ({:.2f})".format(status, time_predicted, epoch_to_time(time_predicted), 100 * score))
+    print("{}: {} {} ({:.2f}%)".format(status, time_predicted, epoch_to_time(time_predicted), 100 * score))
     sys.exit(exit_code)

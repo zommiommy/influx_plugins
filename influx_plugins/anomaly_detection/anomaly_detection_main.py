@@ -1,4 +1,5 @@
 import json
+import logging
 import pandas as pd
 from influxdb import InfluxDBClient
 from ..utils import logger, setLevel, DBAdapter
@@ -37,6 +38,14 @@ def classify_point(point, training_data):
         }
 
 def anomaly_detection(settings):
+    # Set the logger level
+    setLevel({
+        "debug":logging.DEBUG,
+        "info":logging.INFO,
+        "warn":logging.WARN,
+        "critical":logging.CRITICAL,
+    }[settings["verbosity"]])
+
     input_db_settings = {
         key:settings[key]
         for key in [
@@ -64,6 +73,7 @@ def anomaly_detection(settings):
         logger.info("Computed training data:\n%s", training_data)
         data_generator = in_db.get_anomaly_data(selector_values, settings)
         
+        logger.info("Classifying the data")
         classifications = [
             {
                 "measurement": settings["output_measurement"],
@@ -74,10 +84,15 @@ def anomaly_detection(settings):
             for point in data_generator
         ]
         
+        
         if len(classifications) == 0:
+            logger.info("There is no data to classify for the current selectors values and the current filter")
             continue
 
+        logger.info("An example of the classified data is:\n%s", classifications[0])
+
         if settings["dry_run"]:
+            logger.info("Dry-run enabled, gonna skip to the next task and not write any data.")
             continue
 
         if settings["write_to_file"]:
@@ -91,8 +106,12 @@ def anomaly_detection(settings):
 
             continue
 
+        logger.info("Writing the classified data to the db `%s`", output_db_settings["database"])
         # Write to db
         client = InfluxDBClient(**output_db_settings)
+        # ensure that the database exists
         client.create_database(output_db_settings["database"])
         client.switch_database(output_db_settings["database"])
+        # Write the data
         client.write_points(classifications)
+        logger.info("Success, wrote the data to the db `%s`", output_db_settings["database"])

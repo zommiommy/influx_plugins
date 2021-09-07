@@ -3,7 +3,7 @@ import sys
 import logging
 import argparse
 
-
+from .anomaly_detection_main import anomaly_detection
 from ..utils import (
     copyrights, Colors, logger, epoch_to_time, 
     time_to_epoch, MyParser 
@@ -217,4 +217,4 @@ on a file with format `{output_database}.{output_measurement}.{selectors}.json`"
 
     args = vars(parser.parse_args())
 
-    print(args)
+    anomaly_detection(args)
