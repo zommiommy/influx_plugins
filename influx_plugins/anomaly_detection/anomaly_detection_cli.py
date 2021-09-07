@@ -87,7 +87,7 @@ the last 24-hours + 1 hour + 1 second.%s"""%default_fmt,
         help=
 """The model infers how probable is each point, this is the probability treshold 
 that classifies possible anomalies.
-For example 0.05 means that the values with probability less than 5%% 
+For example 0.95 means that the values with probability less than 5%% 
 will be classified as possible anomalies.
 {}
 """.format(default_fmt),
