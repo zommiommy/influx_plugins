@@ -184,6 +184,15 @@ on a file with format `{output_database}.{output_measurement}.{selectors}.json`"
         action="store_true",
         default=False,
     )
+    db_settings.add_argument(
+        "--cert",
+        help=
+"""Path to client certificate information to use for mutual TLS authentication. 
+You can specify a local cert to use as a single file containing the private key 
+and the certificate, or as a tuple of both files’ paths. %s"""%default_fmt,
+        type=str,
+        default=None,
+    )
 
     args = vars(parser.parse_args())
 

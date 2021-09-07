@@ -54,7 +54,8 @@ def anomaly_detection(settings):
             "username",
             "password",
             "ssl",
-            "verify_ssl"
+            "verify_ssl",
+            "cert",
         ]
     }
     input_db_settings["database"] = settings["input_database"]
