@@ -12,15 +12,15 @@ def classify_point(point, training_data):
     key = (ts.day_name(), ts.hour)
     warn_threshold = training_data[key]["warning"]
     anom_threshold = training_data[key]["anomaly"]
-    if point["value"] >= anom_threshold:
+    if point["value"] > anom_threshold:
         return {
             "warning":0,
-            "anomaly":0,
+            "anomaly":1,
             "value":point["value"],
             "warn_threshould":warn_threshold,
             "anom_threshold":anom_threshold,
         }
-    elif point["value"] >= warn_threshold:
+    elif point["value"] > warn_threshold:
         return {
             "warning":1,
             "anomaly":0,
@@ -31,7 +31,7 @@ def classify_point(point, training_data):
     else:
         return {
             "warning":0,
-            "anomaly":1,
+            "anomaly":0,
             "value":point["value"],
             "warn_threshould":warn_threshold,
             "anom_threshold":anom_threshold,
