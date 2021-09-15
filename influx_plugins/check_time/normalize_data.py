@@ -1,7 +1,7 @@
 import numpy as np
 from ..utils import parse_time_to_epoch
 
-def normalize_data(data, value_type):
+def normalize_data(data, value_type, max_value):
     """This methods expects data in the format:
     [{'time':'2021-09-03T09:54:38.890352Z', 'value': 1.9, 'max': 2}]
 
@@ -29,7 +29,7 @@ def normalize_data(data, value_type):
     # Dispatch the points into arrays once they are normalized
     for point in data:
         time.append(parse_time_to_epoch(point["time"]))
-        values.append(normalizer(float(point["value"]), point.get("max")))
+        values.append(normalizer(float(point["value"]), point.get("max") or max_value))
 
     # Conver the values to np arrays, this conversion is needed because appending
     # To a np array is not efficient nor easy

@@ -72,4 +72,4 @@ def time_to_epoch(time):
         result += 60 * 60 * 24 * int(days[:-1])
     if weeks:
         result += 60 * 60 * 24 * 7 * int(weeks[:-1])
-    return result
+    return int(result)

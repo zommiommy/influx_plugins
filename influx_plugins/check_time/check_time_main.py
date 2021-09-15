@@ -54,7 +54,7 @@ def check_time(settings):
     logger.info("Retrieving the data from the db")
     data = db.get_check_time_data(settings).get_points()
 
-    x, y = normalize_data(data, settings["value_type"])   
+    x, y = normalize_data(data, settings["value_type"], settings["max_value"])   
 
     logger.info("Got %s points", x.size)
 
