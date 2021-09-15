@@ -212,12 +212,12 @@ Example:
     logger.info("Critical threshold %s", args["critical_threshold"])
 
     # Critical case
-    if time_predicted >= args["critical_threshold"]:
+    if time_predicted <= args["critical_threshold"]:
         logger.critical("Critical theshold failed!")
         exit_code = 2
         status = "CRITICAL"
     # Warning case
-    elif time_predicted >= args["warning_threshold"]:
+    elif time_predicted <= args["warning_threshold"]:
         logger.warning("Warning theshold failed!")
         exit_code = 1
         status = "WARNING"

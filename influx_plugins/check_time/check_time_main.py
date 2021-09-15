@@ -58,5 +58,8 @@ def check_time(settings):
 
     logger.info("Got %s points", x.size)
 
+    if x.size == 0:
+        logger.error("Got no point!")
+
     return predict_time_left(x, y, settings.get("debug_plot"))
     
