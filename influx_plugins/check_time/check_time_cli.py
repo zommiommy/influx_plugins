@@ -159,7 +159,7 @@ This is used only if value-type is set to `usage` or `free`,
         "--max-value", 
         help=
 """The value to use for saturation, (to use instead of --max-column""",         
-        type=str, 
+        type=float, 
         default=None,
     )
     query_settings.add_argument(
