@@ -126,7 +126,7 @@ WHERE (
 SELECT time, {target_column} as value, {max_column} as max
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window:g}s)
+    time > (now() - {window}s)
     {extra_filter}
 )
 """.format(**query_settings)
@@ -137,7 +137,7 @@ WHERE (
 SELECT time, {target_column} as value
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window:g}s)
+    time > (now() - {window}s)
     {extra_filter}
 )
 """.format(**query_settings)
@@ -148,7 +148,7 @@ WHERE (
 SELECT time, {value_column} as value
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window:g}s)
+    time > (now() - {window}s)
     AND
     {kpi_column} = '{target_kpi}'
     {extra_filter}
@@ -161,7 +161,7 @@ WHERE (
 SELECT time, {value_column} as value, {max_column} as max
 FROM "{measurement}"
 WHERE (
-    time > (now() - {window:g}s)
+    time > (now() - {window}s)
     AND
     {kpi_column} = '{target_kpi}'
     {extra_filter}
