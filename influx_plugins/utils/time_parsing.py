@@ -4,6 +4,7 @@ import re
 import sys
 from time import time
 from datetime import datetime
+import math
 
 from .logger import logger
 
@@ -35,7 +36,7 @@ def rfc3339_to_epoch(string):
     return dt.timestamp() + float("0." + ns)
 
 def epoch_to_time(epoch):
-    if epoch == "inf":
+    if epoch == "inf" or math.isinf(epoch):
         return "inf"
 
     weeks,  epoch = divmod(epoch, (7 * 24 * 60 * 60))
