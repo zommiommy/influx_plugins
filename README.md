@@ -44,7 +44,8 @@ The result can also be checked by the exit code:
 
 Also, all the logging is done in `stderr` so the last line will be the only thing in `stdout`.
 
-
+You can also specify a path for the default db settings. `db_settings.json` and `.tests/test_db_settings.json` are examples
+of the format needed.
 ```bash
 $ ./bin/anomaly_detection --input-database="test_db" --output-database="test_db" --input-measurement="anomaly_measurement_telegraf" --output-measurement="anomaly_measurement_telegraf_ml" --selectors="host,service,kpi" --field="value" --training-timeframe="4w" --window="100s" --warning="0.9" --anomaly="0.95" --verbosity="info"
 

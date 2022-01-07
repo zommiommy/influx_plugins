@@ -14,25 +14,6 @@ description = """
 
 """
 
-db_defaults = {
-    "input_database": "icinga2",
-    "input_measurement": "measurement",
-    "output_database": "icinga2_ml",
-    "output_measurement": "measurement",
-    "host": "localhost",
-    "port": 8086,
-    "username": "root",
-    "password": "root",
-    "ssl": False,
-    "verify_ssl": False,
-    "timeout": 60,
-    "retries": 3,
-    "use_udp": False,
-    "udp_port": 4444,
-    "proxies": {},
-    "cert": None
-}
-
 def anomaly_detection_cli():
     """The Cli adapter for the check_time utility."""
     parser = MyParser(
@@ -238,8 +219,33 @@ and the certificate, or as a tuple of both files paths. %s"""%default_fmt,
     # following the right priority
     # In python 3.9 and 3.5 there are better ways to merge dictionaries
     # but we need to support old python versions so we are stuck with this
-    db_defaults = db_defaults.copy()
-    db_defaults.update(json_db_settings)
-    db_defaults.update(args)
+    db_defaults = {
+        "input_database": "icinga2",
+        "input_measurement": "measurement",
+        "output_database": "icinga2_ml",
+        "output_measurement": "measurement",
+        "host": "localhost",
+        "port": 8086,
+        "username": "root",
+        "password": "root",
+        "ssl": False,
+        "verify_ssl": False,
+        "timeout": 60,
+        "retries": 3,
+        "use_udp": False,
+        "udp_port": 4444,
+        "proxies": {},
+        "cert": None
+    }
+    db_defaults.update({
+        k: v
+        for k, v in json_db_settings.items()
+        if v is not None
+    })
+    db_defaults.update({
+        k: v
+        for k, v in args.items()
+        if v is not None
+    })
 
-    anomaly_detection(args)
+    anomaly_detection(db_defaults)
