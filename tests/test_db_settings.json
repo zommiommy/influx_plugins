@@ -15,7 +15,10 @@
         "path": ""
     },
     "anomaly_detection":{
-        "database": "test_db",
+        "input_database":"test_db",
+        "output_database":"test_db",
+        //"input_measurement": "measurement",
+        //"output_measurement": "measurement",
         "host": "localhost",
         "port": 8086,
         "username": "root",

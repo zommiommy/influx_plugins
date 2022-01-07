@@ -2,9 +2,10 @@ import json
 from influxdb import InfluxDBClient
 
 from influx_plugins import anomaly_detection
-from influx_plugins.utils import logger
-from subprocess import check_output
+from influx_plugins.utils import logger, read_json_with_comments
+from subprocess import run, PIPE
 from .test_utils import *
+
 
 DATA_METHODS = [
     create_telegraf_schema_anomaly_data,
@@ -13,10 +14,14 @@ DATA_METHODS = [
 
 def test_check_time_icinga():
     # Create the test client to write the data to the db
-    with open("./tests/test_db_settings.json", "r") as f:
-        test_settings = json.load(f)["anomaly_detection"]
-    test_db = test_settings["database"]
-    test_client = InfluxDBClient(**test_settings)
+    test_settings =  read_json_with_comments("./tests/test_db_settings.json")["anomaly_detection"]
+    test_db = test_settings["input_database"]
+    db_settings = {
+        "database":test_db,
+        "username":test_settings["username"],
+        "password":test_settings["password"],
+    }
+    test_client = InfluxDBClient(**db_settings)
 
     # Create the test_db
     test_client.create_database(test_db)
@@ -41,4 +46,5 @@ def test_check_time_icinga():
         anomaly_detection(settings)
 
         logger.warn("Calling subprocess with '%s'", "./bin/anomaly_detection " + cli_args)
-        print(check_output("./bin/anomaly_detection " + cli_args, shell=True))
+        result = run("./bin/anomaly_detection " + cli_args, shell=True, check=False, stdout=PIPE)
+        print(result.stdout)
