@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from ..utils import logger, setLevel, DBAdapter, time_to_epoch
+from ..utils import logger, setLevel, DBAdapter, time_to_epoch, read_json_with_comments
 from .predict_time_left import predict_time_left
 from .normalize_data import normalize_data
 
@@ -46,8 +46,10 @@ def check_time(settings):
     if not os.path.exists(settings["db_settings"]):
         logger.error("The given db-settings path do not exist: '%s'", settings["db_settings"])
 
-    with open(settings["db_settings"], "r") as f:
-        db_settings = json.load(f)
+    # Read the json skipping comment lines
+    db_settings = read_json_with_comments(settings["db_settings"])
+    
+    db_settings = db_settings.get("check_time", {})
 
     db = DBAdapter(db_settings, settings["db_type"])
 

@@ -6,7 +6,27 @@ from influxdb import InfluxDBClient
 
 class DBAdapter:
     def __init__(self, db_settings, db_schema):
-        self.settings = db_settings
+        # Only keep the relevant settings
+        filtered_settings = {
+            k: v
+            for k, v in db_settings.items()
+            if k in [
+                "database",
+                "host",
+                "port",
+                "username",
+                "password",
+                "ssl",
+                "verify_ssl",
+                "timeout",
+                "retries",
+                "use_udp",
+                "udp_port",
+                "proxies",
+                "cert",
+            ]
+        }
+        self.settings = filtered_settings
         self.db_schema = db_schema
         logger.info("Conneting to the DB on [{host}:{port}] for the database [{database}]".format(**self.settings))
         self.client = InfluxDBClient(**self.settings)

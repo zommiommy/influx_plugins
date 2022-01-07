@@ -1,3 +1,5 @@
+import json
+
 from .logger import logger, setLevel
 from .db_adapter import DBAdapter
 from .time_parsing import *
@@ -25,3 +27,15 @@ class MyParser(argparse.ArgumentParser):
         sys.stderr.write('error: %s\n' % message)
         self.print_help(file=sys.stderr)
         sys.exit(1)
+
+
+def read_json_with_comments(path):
+    """Read a json skipping lines that start with '//'"""
+    with open(path, "r") as f:
+        db_settings = json.loads(
+            "".join(
+                line
+                for line in f.read().split("\n")
+                if not line.strip().startswith("//")
+            )
+        )

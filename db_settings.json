@@ -1,15 +1,36 @@
+
 {
-    "database": "icinga2",
-    "host": "localhost",
-    "port": 8086,
-    "username": "root",
-    "password": "root",
-    "ssl": false,
-    "verify_ssl": false,
-    "timeout": 60,
-    "retries": 3,
-    "use_udp": false,
-    "udp_port": 4444,
-    "proxies": {},
-    "cert":null
+    "check_time":{
+        "database": "icinga2",
+        "host": "localhost",
+        "port": 8086,
+        "username": "root",
+        "password": "root",
+        "ssl": false,
+        "verify_ssl": false,
+        "timeout": 60,
+        "retries": 3,
+        "use_udp": false,
+        "udp_port": 4444,
+        "proxies": {},
+        "cert": null
+    },
+    "anomaly_detection":{
+        "input_database": "icinga2",
+        "input_measurement": "measurement",
+        "output_database": "icinga2_ml",
+        "output_measurement": "measurement",
+        "host": "localhost",
+        "port": 8086,
+        "username": "root",
+        "password": "root",
+        "ssl": false,
+        "verify_ssl": false,
+        "timeout": 60,
+        "retries": 3,
+        "use_udp": false,
+        "udp_port": 4444,
+        "proxies": {},
+        "cert": null
+    }
 }

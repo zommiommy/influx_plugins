@@ -6,13 +6,32 @@ import argparse
 from .anomaly_detection_main import anomaly_detection
 from ..utils import (
     copyrights, Colors, logger, epoch_to_time, 
-    time_to_epoch, MyParser 
+    time_to_epoch, MyParser,
+    read_json_with_comments,
 )
 
 description = """
 
 """
 
+db_defaults = {
+    "input_database": "icinga2",
+    "input_measurement": "measurement",
+    "output_database": "icinga2_ml",
+    "output_measurement": "measurement",
+    "host": "localhost",
+    "port": 8086,
+    "username": "root",
+    "password": "root",
+    "ssl": False,
+    "verify_ssl": False,
+    "timeout": 60,
+    "retries": 3,
+    "use_udp": False,
+    "udp_port": 4444,
+    "proxies": {},
+    "cert": None
+}
 
 def anomaly_detection_cli():
     """The Cli adapter for the check_time utility."""
@@ -123,22 +142,36 @@ on a file with format `{output_database}.{output_measurement}.{selectors}.json`"
         default=False,
     ) 
 
-    db_settings = parser.add_argument_group('{cyan}Database settings (optional){reset}'.format(cyan=Colors.CYAN, reset=Colors.RESET))
+    db_settings = parser.add_argument_group(
+"""{cyan}Database settings (optional){reset}
+The settings for the DB will follow the following priorities:
+- Command line argument, if specified
+- Db settings json, if present and if specified
+- Default (this can be found at the end of the help of each parameter)
+""".format(cyan=Colors.CYAN, reset=Colors.RESET) + 
+    )
+    
+    db_settings.add_argument(
+        "--db-settings", 
+        help="DB setting json, an example of this file can be found in \n./tests/test_db_settings.json.%s"%default_fmt, 
+        type=str, 
+        default="./db_settings.json",
+    )
     db_settings.add_argument(
         "--input-database",
-        help="The databse from where the data shall be read from.%s"%default_fmt,
+        help="The databse from where the data shall be read from. (default \"icinga2\")",
         type=str, 
-        default="icinga2",
+        default=None,
     )
     db_settings.add_argument(
         "--input-measurement",
         help="The measuremnt from where the data shall be read from",
         type=str, 
-        required=True,
+        default=None,
     ) 
     db_settings.add_argument(
         "--output-database",
-        help="The databse from where the data shall be written to.%s"%default_fmt,
+        help="The databse from where the data shall be written to. (default \"icinga2_ml\")",
         type=str, 
         default="icinga2_ml",
     )
@@ -146,31 +179,31 @@ on a file with format `{output_database}.{output_measurement}.{selectors}.json`"
         "--output-measurement",
         help="The measuremnt from where the data shall be written to",
         type=str, 
-        required=True,
+        default=None,
     ) 
     db_settings.add_argument(
         "--host",
-        help="The hostname / ip of the Influx DBMS.%s"%default_fmt,
+        help="The hostname / ip of the Influx DBMS. (default \"localhost\")",
         type=str, 
-        default="localhost",
+        default=None,
     )
     db_settings.add_argument(
         "--port",
-        help="The port of the Influx DBMS.%s"%default_fmt,
+        help="The port of the Influx DBMS. (default 8086)",
         type=int, 
-        default=8086,
+        default=None,
     )
     db_settings.add_argument(
         "--username",
-        help="The username to use to login into the Influx DBMS.%s"%default_fmt,
+        help="The username to use to login into the Influx DBMS. (default \"root\")",
         type=str, 
-        default="root",
+        default=None,
     )
     db_settings.add_argument(
         "--password",
-        help="The password to use to login into the Influx DBMS.%s"%default_fmt,
+        help="The password to use to login into the Influx DBMS. (default \"root\")",
         type=str, 
-        default="root",
+        default=None,
     )
     db_settings.add_argument(
         "--ssl",
@@ -189,11 +222,24 @@ on a file with format `{output_database}.{output_measurement}.{selectors}.json`"
         help=
 """Path to client certificate information to use for mutual TLS authentication. 
 You can specify a local cert to use as a single file containing the private key 
-and the certificate, or as a tuple of both files’ paths. %s"""%default_fmt,
+and the certificate, or as a tuple of both files paths. %s"""%default_fmt,
         type=str,
         default=None,
     )
 
     args = vars(parser.parse_args())
+
+    if "db-settings" in args:
+        json_db_settings = read_json_with_comments(args["db-settings"]).get("anomaly_detection", {})
+    else:
+        json_db_settings = {}
+    
+    # Merge the values so that proper defaults and settings are propagated 
+    # following the right priority
+    # In python 3.9 and 3.5 there are better ways to merge dictionaries
+    # but we need to support old python versions so we are stuck with this
+    db_defaults = db_defaults.copy()
+    db_defaults.update(json_db_settings)
+    db_defaults.update(args)
 
     anomaly_detection(args)
