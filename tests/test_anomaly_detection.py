@@ -14,7 +14,7 @@ DATA_METHODS = [
 def test_check_time_icinga():
     # Create the test client to write the data to the db
     with open("./tests/test_db_settings.json", "r") as f:
-        test_settings = json.load(f)
+        test_settings = json.load(f)["anomaly_detection"]
     test_db = test_settings["database"]
     test_client = InfluxDBClient(**test_settings)
 

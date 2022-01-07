@@ -148,7 +148,7 @@ The settings for the DB will follow the following priorities:
 - Command line argument, if specified
 - Db settings json, if present and if specified
 - Default (this can be found at the end of the help of each parameter)
-""".format(cyan=Colors.CYAN, reset=Colors.RESET) + 
+""".format(cyan=Colors.CYAN, reset=Colors.RESET)
     )
     
     db_settings.add_argument(

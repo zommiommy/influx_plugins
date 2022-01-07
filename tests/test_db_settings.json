@@ -1,15 +1,32 @@
 {
-    "database": "test_db",
-    "host": "localhost",
-    "port": 8086,
-    "username": "root",
-    "password": "passwordpasswordpassword",
-    "ssl": false,
-    "verify_ssl": false,
-    "timeout": 60,
-    "retries": 3,
-    "use_udp": false,
-    "udp_port": 4444,
-    "proxies": {},
-    "path": ""
+    "check_time":{
+        "database": "test_db",
+        "host": "localhost",
+        "port": 8086,
+        "username": "root",
+        "password": "passwordpasswordpassword",
+        "ssl": false,
+        "verify_ssl": false,
+        "timeout": 60,
+        "retries": 3,
+        "use_udp": false,
+        "udp_port": 4444,
+        "proxies": {},
+        "path": ""
+    },
+    "anomaly_detection":{
+        "database": "test_db",
+        "host": "localhost",
+        "port": 8086,
+        "username": "root",
+        "password": "passwordpasswordpassword",
+        "ssl": false,
+        "verify_ssl": false,
+        "timeout": 60,
+        "retries": 3,
+        "use_udp": false,
+        "udp_port": 4444,
+        "proxies": {},
+        "path": ""
+    }
 }

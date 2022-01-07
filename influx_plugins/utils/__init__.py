@@ -32,10 +32,11 @@ class MyParser(argparse.ArgumentParser):
 def read_json_with_comments(path):
     """Read a json skipping lines that start with '//'"""
     with open(path, "r") as f:
-        db_settings = json.loads(
+        return json.loads(
             "".join(
                 line
                 for line in f.read().split("\n")
                 if not line.strip().startswith("//")
             )
         )
+    
