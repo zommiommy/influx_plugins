@@ -2,6 +2,8 @@ import os
 import sys
 import logging
 import argparse
+import urllib3
+urllib3.disable_warnings()
 
 from .anomaly_detection_main import anomaly_detection
 from ..utils import (
