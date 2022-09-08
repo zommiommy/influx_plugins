@@ -2,7 +2,8 @@ import os
 import sys
 import logging
 import argparse
-
+import urllib3
+urllib3.disable_warnings()
 
 from .check_time_main import check_time
 from ..utils import (
